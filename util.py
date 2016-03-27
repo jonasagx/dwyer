@@ -1,4 +1,5 @@
 import re
+import os
 import json
 import time
 import datetime
@@ -15,6 +16,7 @@ class RawImage:
 		self.base64 = self.toBase64()
 
 	def _loadImage(self):
+		fileInfo = os.stat(self.imagePath)
 		self.image = open(self.imagePath, "rb")
 
 	def toBase64(self):
