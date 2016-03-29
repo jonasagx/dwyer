@@ -1,6 +1,5 @@
 import sys
 import glob
-import base64
 from util import RawImage
 from elasticsearch import Elasticsearch
 
@@ -13,7 +12,7 @@ if(folder[-1] != '/'):
 
 print "Processing pictures in " + folder
 
-for photoPath in glob.glob(folder + '*.jpg'):
-	i = RawImage(photoPath)
-	res = client.index(index="katie", doc_type='cloud', id=i.getTimestamp(), body=i.export())
+for key, photoPath in enumerate(glob.glob(folder + '*.jpg')):
+	img = RawImage(photoPath)
+	res = client.index(index="katie", doc_type='raw_cloud', body=img.export(), id=key)
 	print photoPath
