@@ -2,7 +2,9 @@ import re
 import os
 import json
 import time
+import json
 import datetime
+import numpy as np
 
 class RawImage:
 	"""docstring for image"""
@@ -44,3 +46,49 @@ class RawImage:
 
 	def export(self):
 		return self._getDict()
+
+class Pair:
+	def __init__(self, keyPoint, descriptor):
+		self.keyPoint = keyPoint
+		self.descriptor = descriptor
+
+	def getDict(self):
+		return {
+			'pt': list(self.keyPoint.pt), 
+			'angle': self.keyPoint.angle, 
+			'octave': self.keyPoint.octave, 
+			'class_id': self.keyPoint.class_id, 
+			'response': self.keyPoint.response, 
+			'size': self.keyPoint.size,	
+			'descriptor': self.descriptor.tolist()
+		}
+
+	def jsonify(self):
+		return self.getDict()
+
+	def __str__(self):
+		return json.dumps(self.getDict())
+
+class Pairs:
+	def __init__(self, keys, descs):
+		self.pairs = []
+		for k, d in zip(keys, descs):
+			self.pairs.append(Pair(k, d))
+
+	def add(self, pair):
+		self.pairs.append(pair)
+
+	def get(self):
+		return self.pairs
+
+	def jsonify(self):
+		return {
+			'list': self.pairs
+		}
+
+	def __str__(self):
+		return json.dumps(self.jsonify())
+	# 	# str = ''
+	# 	# for pair in self.pairs:
+	# 	# 	str += pair.__str__()
+	# 	# return str
